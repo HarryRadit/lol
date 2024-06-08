@@ -55,5 +55,5 @@ while not game_over:
     ball = pygame.draw.circle(window, black, (ball_x + 200, ball_y +240), ball_radius)
 
     pygame.display.update()
-
+    print(())
 
