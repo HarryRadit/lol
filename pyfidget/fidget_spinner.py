@@ -7,25 +7,26 @@ pygame.init()
 
 window_width, window_height = 600,400
 window = pygame.display.set_mode((window_width, window_height))
-pygame.display.set_caption("AMOGUS")
+pygame.display.set_caption("Spinner")
+
 
 #colors
+WHITE = (255,255,255)
+RED = (255,0,0)
+GREEN = (0,255,0)
+BLUE = (0,0,255)
+BLACK = (0,0,0)
 
-white = (255, 255, 255)
-black = (0, 0, 0)
-red = (255, 0, 0)
-green = (0, 255, 0)
-blue = (0, 0, 255)
-
-background_image = pygame.image.load("download (6).png").convert()
+background_image = pygame.image.load("download(6).png").convert()
 background_image = pygame.transform.scale(background_image, (window_width, window_height))
-spinner_image = [
-    pygame.image.load("images__3_-removebg-preview (1).png").convert_alpha(),
-    pygame.image.load("images__4_-removebg-preview (1).png")
+
+spinner_image= [
+    pygame.image.load("download__14_-removebg-preview.png").convert_alpha(),
+    pygame.image.load("images__5_-removebg-preview.png").convert_alpha(),
 ]
 
-spinner_width, spinner_height = 300, 300
-spinner_image = [pygame.transform.scale(spinner_image[0], (spinner_width, spinner_height)) for image in spinner_image]
+spinner_width, spinner_height = 300,300
+spinner_image = [pygame.transform.scale(image, (spinner_width, spinner_height)) for image in spinner_image]
 
 #position and rotation
 spinner_x = window_width // 2
@@ -34,7 +35,7 @@ spinner_rotation = 0
 
 #spinner speed and index
 spinner_rotation_speed = 5
-current_spinner = 0
+current_spinner =0
 
 #font for display speed
 font = pygame.font.SysFont(None, 48)
@@ -46,29 +47,38 @@ def change_spinner():
     if current_spinner >= len(spinner_image):
         current_spinner = 0
 
-game_over = True
+#game over
+game_over = False
+
 
 while not game_over:
-
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
 
-    window.blit(background_image, (0, 0))
+        if event.type  ==  MOUSEBUTTONDOWN:
+            change_spinner()
 
-    #rotate the spinner basedon mouse move
+    window.blit(background_image, (0,0))
+
+    #rotate the spinner based on mouse move
     mouse_x, mouse_y = pygame.mouse.get_pos()
     angle = math.atan2(mouse_y - spinner_y, mouse_x - spinner_x)
-    spinner_rotation_speed =  math.degrees(angle) #convert radians to degrees
+    spinner_rotation_speed = math.degrees(angle)   #convert radians to degrees
 
     #rotate the spinner image
     spinner_rotation += spinner_rotation_speed
-    rotate_spinner = pygame.transform.rotate(spinner_image[current_spinner], spinner_rotation)
+    rotate_spinner =pygame.transform.rotate(spinner_image[current_spinner], -spinner_rotation)
     spinner_rect = rotate_spinner.get_rect(center = (spinner_x, spinner_y))
 
     window.blit(rotate_spinner, spinner_rect)
+
+    spinner_text = font.render(str(spinner_rotation_speed), True, BLACK)
+    window.blit(spinner_text, (300,10))
     pygame.display.update()
+    pygame.time.delay(30)
+
 
 pygame.quit()
 sys.exit()

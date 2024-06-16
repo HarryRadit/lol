@@ -91,7 +91,6 @@ window.blit(score_text, (10, 10))
 game_over_text = font.render("Game Over", True, black)
 window.blit(game_over_text, (window_width // 2 - 100, window_height // 2))
 pygame.display.update()
-
 pygame.time.delay(2000)
 pygame.quit()
 sys.exit()
