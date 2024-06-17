@@ -17,7 +17,7 @@ GREEN = (0,255,0)
 BLUE = (0,0,255)
 BLACK = (0,0,0)
 
-background_image = pygame.image.load("download(6).png").convert()
+background_image = pygame.image.load("../pysound/download(6).png").convert()
 background_image = pygame.transform.scale(background_image, (window_width, window_height))
 
 spinner_image= [
