@@ -63,9 +63,11 @@ def play_sequence(length):
     sequence = [random.randint(1,4) for _ in range(length)]
     display_message("listen sequence")
 
+
     for BRAINROT_num in sequence:
         BRAINROT[BRAINROT_num]['sound'].play()
         display_image()
+
 
 
 def play_sound_end_get_response():
@@ -80,7 +82,7 @@ def play_sound_end_get_response():
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
-                    image_rect = BRAINROT(BRAINROT_num)['image'].get_rect(
+                    image_rect = BRAINROT[BRAINROT_num]['image'].get_rect(
                         topleft =  ((BRAINROT_num-1)*100+25,150)
                     )
                     if image_rect.collidepoint(mouse_x, mouse_y):
@@ -90,5 +92,25 @@ def play_sound_end_get_response():
 
     return True
 
+pygame.mixer.init()
 
-play_sound_end_get_response()
+game_over = False
+
+while not game_over:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            game_over = True
+
+    #play sound and get player response
+    if play_sound_end_get_response():
+        display_message("correct sequence")
+        print("correct sequence")
+        pygame.time.delay(1500)
+    else:
+        display_message("wrong sequence")
+        print("wrong sequence")
+        pygame.time.delay(2000)
+        game_over = True
+
+pygame.quit()
+sys.exit()
