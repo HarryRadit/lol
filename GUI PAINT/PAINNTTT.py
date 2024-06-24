@@ -41,9 +41,9 @@ running = True
 while running:
     toolbar.fill(GREY)
     font = pygame.font.SysFont(None, 24)
-    pen_text = font.render("Pen", True, BLACK)
-    erase_text = font.render("Erase", True, BLACK)
-    clear_text = font.render("Clear", True, BLACK)
+    pen_text = font.render("P", True, BLACK)
+    erase_text = font.render("E", True, BLACK)
+    clear_text = font.render("C", True, BLACK)
     decrease_text = font.render("-", True, BLACK)
     increase_text = font.render("+", True, BLACK)
 
@@ -53,7 +53,60 @@ while running:
     toolbar.blit(decrease_text, (160, 20))
     toolbar.blit(increase_text, (200, 20))
 
+    #draw the color selection buttons
+    color_button_width = 20
+    color_button_height = 20
+    black_button_color = pygame.draw.circle(toolbar, BLACK, (240,25), color_button_width // 2)
+    red_button_color = pygame.draw.circle(toolbar, RED, (280,25), color_button_width // 2)
+
 
     WINDOW.fill(WHITE)
     WINDOW.blit(surface, (0, toolbar_height))
     WINDOW.blit(toolbar, (0, 0))
+
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.pos[1] < toolbar_height:
+                pen_rect = pen_text.get_rect(topleft=(40,20))
+                erase_rect = erase_text.get_rect(topleft=(80,20))
+                decrease_rect = decrease_text.get_rect(topleft=(160,20))
+                increase_rect = increase_text.get_rect(topleft=(200,20))
+
+                if pen_rect.collidepoint(event.pos):
+                    erase_node = False
+                    print("pen")
+                elif erase_rect.collidepoint(event.pos):
+                    erase_node = True
+                    print("erase")
+                elif decrease_rect.collidepoint(event.pos):
+                    if brush_size < min_brush_size:
+                        brush_size -= 1
+                elif increase_rect.collidepoint(event.pos):
+                    if brush_size > max_brush_size:
+                        brush_size += 1
+                elif black_button_color.collidepoint(event.pos):
+                    brush_color = BLACK
+                    print("black")
+                elif red_button_color.collidepoint(event.pos):
+                    brush_color = RED
+            else:
+                drawing = True
+                last_pos = (event.pos[0], event.pos[1] - toolbar_height)
+        elif event.type == pygame.MOUSEBUTTONUP:
+            drawing = False
+        elif event.type == pygame.MOUSEMOTION and drawing:
+            color = brush_color if not erase_node else WHITE
+            pygame.draw.line(surface, color, last_pos, event.pos, brush_size)
+            last_pos = (event.pos[0], event.pos[1] - toolbar_height)
+
+
+
+
+
+
+
+    pygame.display.flip(),
+
+pygame.quit()
