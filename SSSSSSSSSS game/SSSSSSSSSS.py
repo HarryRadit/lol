@@ -50,13 +50,13 @@ class Snake:
 
 #show intro screen
 def show_intro_screen():
-    font_large = pygame.font.Font(name=None, size=50)
-    font_small = pygame.font.Font(name=None, size=30)
+    font_large = pygame.font.Font(None, 50)
+    font_small = pygame.font.Font(None, 30)
 
-    game_name = font_large.render(text="SSSSSNAKE GAME", color=black)
-    slow_button = font_small.render(text="SLOW", color=black)
-    normal_button = font_small.render(text="NORMAL", color=black)
-    fast_button = font_small.render(text="FAST", color=black)
+    game_name = font_large.render("SSSSSNAKE GAME",True, black)
+    slow_button = font_small.render("SLOW", True, black)
+    normal_button = font_small.render("NORMAL", True,black)
+    fast_button = font_small.render("FAST", True, black)
 
     while True:
         for event in pygame.event.get():
@@ -68,6 +68,7 @@ def show_intro_screen():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x,y = pygame.mouse.get_pos()
                 if 125 <= x <= 275 and 350 <= y <= 200:
+                    print("slow")
                     return "slow"
                 elif 125 <= x <= 275 and 250 <= y <= 250:
                     return "normal"
@@ -77,22 +78,23 @@ def show_intro_screen():
 
 
         window.fill(white)
-        window.blit(game_name, (WIDTH // 2, HEIGHT // 4 - game_name.get_width() // 2))
-        window.blit(slow_button, (WIDTH // 2 - slow_button.get_width(), HEIGHT // 2 - 10))
-        window.blit(normal_button, (WIDTH // 2 - normal_button.get_width(), HEIGHT // 2 - 40))
-        window.blit(fast_button, (WIDTH // 2 - fast_button.get_width(), HEIGHT // 2 + 90))
+        window.blit(game_name, (WIDTH // 2 - game_name.get_width() // 2, HEIGHT // 4 - game_name.get_height() // 2))
+        window.blit(slow_button, (WIDTH // 2 - slow_button.get_width() // 2, HEIGHT // 2 - 10))
+        window.blit(normal_button, (WIDTH // 2 - normal_button.get_width() // 2, HEIGHT // 2 + 40))
+        window.blit(fast_button, (WIDTH // 2 - fast_button.get_width() // 2, HEIGHT // 2 + 90))
         pygame.display.update()
 
 
 def main():
+    snake_speed = 0
     speed_level = show_intro_screen()
 
     if speed_level == "slow":
-        speed = 0.1
+        snake_speed = 0.1
     elif speed_level == "normal":
-        speed = 10
+        snake_speed = 10
     elif speed_level == "fast":
-        speed = 15
+        snake_speed = 15
 
     snake = Snake(speed_level)
 
@@ -115,12 +117,17 @@ def main():
                 elif event.key == pygame.K_RIGHT:
                     snake.change_direction(1, 0)
 
+        #move the snake
         snake.move()
-        if snake.get_head() in snake.get_body()[1:]:
-            pygame.quit()
-            return
-
         window.fill(white)
+        for segment in snake.body:
+            pygame.draw.rect(window, black, (segment[0], segment[1], 20, 20))
+        pygame.display.update()
+        clock.tick(snake_speed)
+
+
+if __name__ == "__main__":
+    main()
 
 
 
