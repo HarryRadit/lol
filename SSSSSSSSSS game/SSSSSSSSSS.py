@@ -11,12 +11,15 @@ window_title = "SSSSNAKE GAME"
 
 white = (255, 255, 255)
 black = (0, 0, 0)
+red = (255, 0, 0)
 
 #create the game window
 window = pygame.display.set_mode(window_size)
 pygame.display.set_caption(window_title)
 
 #snake class to manage movement and growth
+
+
 class Snake:
     def __init__(self, speed):
         self.body = [(WIDTH // 2, HEIGHT // 2) for i in range(4)]
@@ -66,13 +69,16 @@ def show_intro_screen():
 
             #check for button clicks to set snake's speed
             if event.type == pygame.MOUSEBUTTONDOWN:
-                x,y = pygame.mouse.get_pos()
-                if 125 <= x <= 275 and 350 <= y <= 200:
+                x, y = pygame.mouse.get_pos()
+                print(x, y)
+                if 75 <= x <= 275 and 100 <= y <= 180:
                     print("slow")
                     return "slow"
-                elif 125 <= x <= 275 and 250 <= y <= 250:
+                elif 125 <= x <= 275 and 180 <= y <= 230:
+                    print("normal")
                     return "normal"
-                elif 125 <= x <= 275 and 250 <= y <= 300:
+                elif 125 <= x <= 275 and 240 <= y <= 300:
+                    print("fast")
                     return "fast"
 
 
@@ -84,19 +90,35 @@ def show_intro_screen():
         window.blit(fast_button, (WIDTH // 2 - fast_button.get_width() // 2, HEIGHT // 2 + 90))
         pygame.display.update()
 
+#class Food
+
+
+class Food:
+    def __init__(self):
+        self.position = (random.randint(10, WIDTH - 10), random.randint(10, HEIGHT - 10))
+
+    def respawn(self):
+        self.position = (random.randint(10, WIDTH - 10), random.randint(10, HEIGHT - 10))
+
+    def get_position(self):
+        return self.position
+
+def distance(pos1, pos2):
+    return math.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
 
 def main():
     snake_speed = 0
     speed_level = show_intro_screen()
 
     if speed_level == "slow":
-        snake_speed = 0.1
+        snake_speed = 7
     elif speed_level == "normal":
         snake_speed = 10
     elif speed_level == "fast":
         snake_speed = 15
 
     snake = Snake(speed_level)
+    food = Food()
 
     score = 0
     clock = pygame.time.Clock()
@@ -119,11 +141,33 @@ def main():
 
         #move the snake
         snake.move()
+        head = snake.get_head()
+        if distance(head, food.get_position()) < 10:
+            food.respawn()
+            print("food")
+            snake.grow()
+            score += 1
+
+
         window.fill(white)
         for segment in snake.body:
             pygame.draw.rect(window, black, (segment[0], segment[1], 20, 20))
+        # draw food
+        pygame.draw.rect(window, red, (20, 20, 20, 20))
+
+
+
+        #show score
+        font = pygame.font.SysFont(None, 24)
+        score_text = font.render("Score: " + str(score), True, black)
+        window.blit(score_text, (10, 10))
+
+
         pygame.display.update()
         clock.tick(snake_speed)
+
+
+
 
 
 if __name__ == "__main__":
