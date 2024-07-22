@@ -16,7 +16,35 @@ style.configure("TButton", foreground="black", background="lavender")
 style.configure("TCombobox", foreground="black", background="white")
 
 def submit():
-    print("Registration completed!, wait atleast 1 month to be approved.")
+    name = name_entry.get()
+    age = age_entry.get()
+    email = email_entry.get()
+    gender = gender_var.get()
+    password = password_entry.get()
+    confirm_password = confirm_password_entry.get()
+    country = country_combobox.get()
+    bio = bio_textbox.get("1.0", tk.END)
+    othercountry = othercountry_entry.get()
+    print(name, age, email, gender, password, confirm_password, country, bio, othercountry)
+
+    if not name or not age or not email or not gender or not password or not confirm_password or not country:
+        messagebox.showerror("Error", "Please fill in all fields")
+        return
+
+    if password != confirm_password:
+        messagebox.showerror("Error", "Passwords do not match")
+        return
+
+    messagebox.showinfo("Success", "Form submitted successfully")
+    name_entry.delete(0, tk.END)
+    age_entry.delete(0, tk.END)
+    email_entry.delete(0, tk.END)
+    password_entry.delete(0, tk.END)
+    confirm_password_entry.delete(0, tk.END)
+    country_combobox.set("")
+    bio_textbox.delete("1.0", tk.END)
+    othercountry_entry.delete(0, tk.END)
+
 
 name_label = ttk.Label(root, text="Name: ")
 name_label.grid(row=0, column=0, padx=10, pady=10,  sticky=tk.N)
@@ -54,10 +82,10 @@ age_entry.grid(row=1, column=1, padx=10, pady=10,  sticky=tk.N)
 email_entry = ttk.Entry(root, width=30)
 email_entry.grid(row=2, column=1, padx=10, pady=10,  sticky=tk.N)
 
-password_entry = ttk.Entry(root, width=30)
+password_entry = ttk.Entry(root, width=30, show="*")
 password_entry.grid(row=4, column=1, padx=10, pady=10,  sticky=tk.N)
 
-confirm_password_entry = ttk.Entry(root, width=30)
+confirm_password_entry = ttk.Entry(root, width=30, show="*")
 confirm_password_entry.grid(row=5, column=1, padx=10, pady=10,  sticky=tk.N)
 
 country_combobox = ttk.Combobox(root, width=20)
@@ -65,10 +93,10 @@ country_combobox['values'] = ('Indonesia','Malaysia','Singapore','Thailand','Vie
 country_combobox.grid(row=6, column=1, padx=10, pady=10,  sticky=tk.N)
 
 othercountry_entry = ttk.Entry(root, width=30)
-othercountry_entry.grid(row=7, column=1, padx=10, pady=10,  sticky=tk.N)
+othercountry_entry.grid(row=8, column=1, padx=10, pady=10,  sticky=tk.N)
 
-bio_text = tk.Text(root, width=30, height=5)
-bio_text.grid(row=8, column=1, padx=10, pady=10,  sticky=tk.N)
+bio_textbox = tk.Text(root, width=30, height=10)
+bio_textbox.grid(row=7, column=1, padx=10, pady=10)
 
 submit_button = ttk.Button(root, text="Submit", cursor = "hand2", style="TButton", command=submit)
 submit_button.grid(row=9, column=1, padx=10, pady=10,  sticky=tk.N)
