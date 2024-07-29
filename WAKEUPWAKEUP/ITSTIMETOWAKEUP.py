@@ -2,8 +2,8 @@ import tkinter as tk
 from datetime import datetime
 from tkinter import messagebox
 import pytz
-
-
+import os
+from playsound import playsound
 
 jakarta = pytz.timezone('Asia/Jakarta')
 
@@ -23,7 +23,10 @@ def set_alarm():
 
 def check_alarm(current_time):
     if alarm_time.get() == current_time:
+        playsound("meme-alarm-loud.mp3")
         messagebox.showinfo("wake up", "time to wake up")
+
+
 
 root = tk.Tk()
 root.title("clock")
