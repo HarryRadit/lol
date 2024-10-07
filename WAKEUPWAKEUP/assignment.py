@@ -9,4 +9,6 @@ print(type(digits.target_names))  # Data type of digits.target_names
 
 # Get the unique labels in the dataset
 unique_labels = digits.target_names.astype(int)
-print(unique_labels)
+print(unique_labels)fdf
+
+
